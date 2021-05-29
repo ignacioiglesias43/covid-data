@@ -1,14 +1,11 @@
 import { ThemeProvider } from "@material-ui/core";
-import P5Sketch from "./components/organisms/P5Sketch";
+import Dashboard from "./components/views/Dashboard";
 import theme from "./styles/theme";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      {/*  <Button variant="contained" color="primary">
-        Hola Mundo!
-      </Button> */}
-      <P5Sketch />
+      <Dashboard />
     </ThemeProvider>
   );
 }
