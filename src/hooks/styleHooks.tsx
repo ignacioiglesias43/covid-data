@@ -30,6 +30,10 @@ export const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
+  },
 }));
 
 export const useAlertStyles = (
@@ -37,7 +41,7 @@ export const useAlertStyles = (
   textColor?: string
 ) => {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.between("sm", "md"));
+  const matches = useMediaQuery(theme.breakpoints.between("sm", "lg"));
 
   const styles = makeStyles((theme) => ({
     main: {
