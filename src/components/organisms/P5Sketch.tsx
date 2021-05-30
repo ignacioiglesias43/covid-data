@@ -1,7 +1,11 @@
 import React, { useRef } from "react";
-import { useMediaQuery, useTheme } from "@material-ui/core";
+import { Box } from "@material-ui/core";
+import { Virus } from "mdi-material-ui";
+
+import { useSketchStyles } from "../../hooks/styleHooks";
+
 import Sketch from "react-p5";
-import p5Types from "p5"; //Import this for typechecking and intellisense
+import p5Types from "p5";
 // @ts-ignore
 import Mappa from "mappa-mundi";
 
@@ -26,12 +30,11 @@ interface P5SketchProps {
 const P5Sketch: React.FC<P5SketchProps> = (props: P5SketchProps) => {
   const canvas = useRef<p5Types.Renderer>();
   const map = useRef<any>();
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.between("sm", "md"));
+  const classes = useSketchStyles();
   //See annotations in JS for more information
   const setup = (p5: p5Types, canvasParentRef: Element) => {
     canvas.current = p5
-      .createCanvas(matches ? p5.windowWidth - 40 : 800, 500)
+      .createCanvas(p5.windowWidth - 85, 500)
       .parent(canvasParentRef);
 
     // Create a tile map and overlay the canvas on top.
@@ -44,7 +47,15 @@ const P5Sketch: React.FC<P5SketchProps> = (props: P5SketchProps) => {
 
   const draw = (p5: p5Types) => {};
 
-  return <Sketch setup={setup} draw={draw} />;
+  return (
+    <Box boxShadow={2} className={classes.container}>
+      <div className={classes.titleContainer}>
+        <h2 className={classes.title}>Mapa de Casos Confirmados</h2>
+        <Virus color="primary" />
+      </div>
+      <Sketch setup={setup} draw={draw} />
+    </Box>
+  );
 };
 
 export default P5Sketch;

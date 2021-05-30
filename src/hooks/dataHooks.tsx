@@ -95,7 +95,8 @@ export const useMainData = () => {
       setAlerts([...newAlerts]);
       setStates({ ...data.State });
     }
-  }, [alerts, data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return {
     open,

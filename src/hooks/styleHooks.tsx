@@ -34,6 +34,9 @@ export const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     color: "#fff",
   },
+  icon: {
+    alignSelf: "center",
+  },
 }));
 
 export const useAlertStyles = (
@@ -41,7 +44,7 @@ export const useAlertStyles = (
   textColor?: string
 ) => {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.between("sm", "lg"));
+  const matches = useMediaQuery(theme.breakpoints.between("xs", "lg"));
 
   const styles = makeStyles((theme) => ({
     main: {
@@ -63,3 +66,17 @@ export const useAlertStyles = (
 
   return styles();
 };
+
+export const useSketchStyles = makeStyles((theme) => ({
+  container: { padding: 20 },
+  titleContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    color: theme.palette.primary.dark,
+  },
+  title: {
+    marginRight: 10,
+  },
+}));

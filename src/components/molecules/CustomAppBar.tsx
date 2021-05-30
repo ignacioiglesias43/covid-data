@@ -1,6 +1,7 @@
 import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import { useStyles } from "../../hooks/styleHooks";
 import clsx from "clsx";
+import { Virus } from "mdi-material-ui";
 
 const CustomAppBar = () => {
   const classes = useStyles();
@@ -16,6 +17,7 @@ const CustomAppBar = () => {
         >
           Covid-19
         </Typography>
+        <Virus color="inherit" className={classes.icon} />
       </Toolbar>
     </AppBar>
   );
