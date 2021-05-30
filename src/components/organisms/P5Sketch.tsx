@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Box } from "@material-ui/core";
+import { Box, Divider } from "@material-ui/core";
 import { Virus } from "mdi-material-ui";
 
 import { useSketchStyles } from "../../hooks/styleHooks";
@@ -15,8 +15,8 @@ const mapboxToken =
 const mappa = new Mappa("Mapbox", mapboxToken);
 
 const options = {
-  lat: 19.451054,
-  lng: -99.125519,
+  lat: 23.634501,
+  lng: -102.552784,
   zoom: 5,
   studio: true, // false to use non studio styles
   //style: 'mapbox.dark' //streets, outdoors, light, dark, satellite (for nonstudio)
@@ -66,6 +66,7 @@ const P5Sketch: React.FC<P5SketchProps> = (props: P5SketchProps) => {
         <h2 className={classes.title}>Mapa de Casos Confirmados</h2>
         <Virus color="primary" />
       </div>
+      <Divider style={{ marginBottom: 20 }} />
       <Sketch setup={setup} draw={draw} windowResized={windowResized} />
     </Box>
   );
