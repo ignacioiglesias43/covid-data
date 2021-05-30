@@ -47,13 +47,26 @@ const P5Sketch: React.FC<P5SketchProps> = (props: P5SketchProps) => {
 
   const draw = (p5: p5Types) => {};
 
+  const windowResized = (p5: p5Types) => {
+    p5.resizeCanvas(p5.windowWidth - 85, 500, true);
+    // map.current.overlay(canvas.current);
+    resizeMap();
+  };
+
+  function resizeMap() {
+    // @ts-ignore: I don't care that it might not be a HTML Canvas Element
+    map.current.mappaDiv.style.width = canvas?.current?.width + "px";
+    // @ts-ignore: I don't care that it might not be a HTML Canvas Element
+    map.current.mappaDiv.style.height = canvas?.current?.height + "px";
+  }
+
   return (
     <Box boxShadow={2} className={classes.container}>
       <div className={classes.titleContainer}>
         <h2 className={classes.title}>Mapa de Casos Confirmados</h2>
         <Virus color="primary" />
       </div>
-      <Sketch setup={setup} draw={draw} />
+      <Sketch setup={setup} draw={draw} windowResized={windowResized} />
     </Box>
   );
 };
