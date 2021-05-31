@@ -1,4 +1,6 @@
 import { useRef } from "react";
+import { useTheme, useMediaQuery } from "@material-ui/core";
+import useWindowDimensions from "./dimensionHooks";
 import p5Types from "p5";
 // @ts-ignore
 import Mappa from "mappa-mundi";
@@ -19,10 +21,15 @@ export const useMappa = () => {
   const canvas = useRef<p5Types.Renderer>();
   const map = useRef<any>();
 
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.between("xs", "lg"));
+
+  const { width } = useWindowDimensions();
+
+  const canvasWidth = matches ? width - 85 : width * 0.5 - 85;
+
   const setup = (p5: p5Types, canvasParentRef: Element) => {
-    canvas.current = p5
-      .createCanvas(p5.windowWidth - 85, 500)
-      .parent(canvasParentRef);
+    canvas.current = p5.createCanvas(canvasWidth, 500).parent(canvasParentRef);
 
     // Create a tile map and overlay the canvas on top.
     map.current = mappa.tileMap(options);
@@ -35,7 +42,7 @@ export const useMappa = () => {
   const draw = (p5: p5Types) => {};
 
   const windowResized = (p5: p5Types) => {
-    p5.resizeCanvas(p5.windowWidth - 85, 500, true);
+    p5.resizeCanvas(canvasWidth, 500, true);
     // map.current.overlay(canvas.current);
     resizeMap();
   };

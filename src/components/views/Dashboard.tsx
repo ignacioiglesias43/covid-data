@@ -38,8 +38,10 @@ export default function Dashboard() {
               draw={draw}
               setup={setup}
               windowResized={windowResized}
+              id="mappa"
             />
             <P5Sketch
+              id="chart"
               title="Gráfica de Casos Confirmados"
               draw={chartDraw}
               setup={setupChart}

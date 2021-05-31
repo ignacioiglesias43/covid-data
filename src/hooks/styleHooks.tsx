@@ -45,6 +45,7 @@ export const useStyles = () => {
       display: "flex",
       flexDirection: matches ? "column" : "row",
       gap: 20,
+      marginRight: matches ? 0 : 20,
     },
   }));
   return styles();
@@ -85,7 +86,7 @@ export const useSketchStyles = () => {
   const styles = makeStyles((theme) => ({
     container: {
       padding: 20,
-      minWidth: matches ? "100%" : "50%",
+      width: matches ? "100%" : "50%",
     },
     titleContainer: {
       display: "flex",

@@ -9,6 +9,7 @@ import { P5SketchProps } from "../../interfaces/p5";
 
 const P5Sketch: React.FC<P5SketchProps> = ({
   title = "",
+  id = "sketch",
   preload = () => {},
   setup = () => {},
   draw = () => {},
@@ -17,7 +18,7 @@ const P5Sketch: React.FC<P5SketchProps> = ({
   const classes = useSketchStyles();
 
   return (
-    <Box boxShadow={2} className={classes.container}>
+    <Box boxShadow={2} className={classes.container} id={id}>
       <div className={classes.titleContainer}>
         <h2 className={classes.title}>{title}</h2>
         <Virus color="primary" />

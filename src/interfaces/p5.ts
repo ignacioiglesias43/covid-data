@@ -4,6 +4,7 @@ export interface P5SketchProps {
   title?: string;
   /**	ClassName for canvas parent ref  */
   className?: String;
+  id?: string;
   /**	Styles for canvas parent ref  */
   style?: { [key: string]: number | string };
   /**	The setup() function is called once when the program starts.  */
