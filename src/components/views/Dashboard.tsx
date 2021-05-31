@@ -5,6 +5,7 @@ import {
   CssBaseline,
 } from "@material-ui/core";
 import { useMainData } from "../../hooks/dataHooks";
+import { useMappa, useChart } from "../../hooks/p5Hooks";
 import { useStyles } from "../../hooks/styleHooks";
 
 import CustomAppBar from "../molecules/CustomAppBar";
@@ -15,6 +16,14 @@ export default function Dashboard() {
   const classes = useStyles();
   const { open, alerts } = useMainData();
 
+  const { draw, setup, windowResized } = useMappa();
+
+  const {
+    draw: chartDraw,
+    setup: setupChart,
+    windowResized: windowResizedChart,
+  } = useChart();
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -23,7 +32,20 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="xl" className={classes.container}>
           <AlertsList data={alerts} />
-          <P5Sketch />
+          <div className={classes.sketches}>
+            <P5Sketch
+              title="Mapa de Casos Confirmados"
+              draw={draw}
+              setup={setup}
+              windowResized={windowResized}
+            />
+            <P5Sketch
+              title="Gráfica de Casos Confirmados"
+              draw={chartDraw}
+              setup={setupChart}
+              windowResized={windowResizedChart}
+            />
+          </div>
         </Container>
       </main>
       <Backdrop className={classes.backdrop} open={open}>
