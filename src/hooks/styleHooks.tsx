@@ -46,7 +46,9 @@ export const useStyles = () => {
       flexDirection: matches ? "column" : "row",
       gap: 20,
       marginRight: matches ? 0 : 20,
+      position: "relative",
     },
+    centerMapBtn: { position: "absolute", top: 550, left: 35 },
   }));
   return styles();
 };
@@ -98,7 +100,7 @@ export const useSketchStyles = () => {
     title: {
       marginRight: 10,
     },
-    divider: { marginBottom: 20 },
+    divider: { marginBottom: 5 },
   }));
   return styles();
 };
