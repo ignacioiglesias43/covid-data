@@ -17,7 +17,7 @@ import P5Sketch from "../organisms/P5Sketch";
 
 export default function Dashboard() {
   const classes = useStyles();
-  const { open, alerts, states } = useMainData();
+  const { open, alerts, states, data } = useMainData();
 
   const { preload, draw, setup, windowResized, handleCenterMap } =
     useMappa(states);
@@ -26,7 +26,7 @@ export default function Dashboard() {
     draw: chartDraw,
     setup: setupChart,
     windowResized: windowResizedChart,
-  } = useChart();
+  } = useChart(data);
 
   return (
     <div className={classes.root}>
