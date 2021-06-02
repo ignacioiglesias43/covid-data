@@ -84,7 +84,7 @@ export const useMappa = (states: Object) => {
             // @ts-ignore
             const txt = `${f.properties.entidad_nombre}: \n (Infectados: ${
               // @ts-ignore
-              states[f.properties.entidad_nombre].infected?.toLocaleString()
+              states[f.properties.entidad_nombre]?.infected?.toLocaleString()
             })`;
             popup.setLngLat(e.lngLat).setHTML(txt).addTo(map.current);
           }
