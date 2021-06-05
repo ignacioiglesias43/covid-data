@@ -29,5 +29,5 @@ It correctly bundles React in production mode and optimizes the build for the be
 ## Integrantes
 
 - Ignacio Iglesias Campoy
-- Darien Ramírez Chaidez
-- Ruben Jasahel Sandoval Pérez
+- José Manuel Verdugo Burgoin
+- Jorge Tulio Morones Castro

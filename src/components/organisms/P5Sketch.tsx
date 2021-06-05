@@ -14,6 +14,7 @@ const P5Sketch: React.FC<P5SketchProps> = ({
   setup = () => {},
   draw = () => {},
   windowResized = () => {},
+  mouseWheel = () => {},
 }: P5SketchProps) => {
   const classes = useSketchStyles();
 
@@ -29,6 +30,7 @@ const P5Sketch: React.FC<P5SketchProps> = ({
         setup={setup}
         draw={draw}
         windowResized={windowResized}
+        mouseWheel={mouseWheel}
       />
     </Box>
   );
