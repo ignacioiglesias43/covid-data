@@ -132,47 +132,39 @@ export const useChart = (data: MainData) => {
 
   const canvasWidth = matches ? width - 85 : width * 0.5 - 85;
 
-  const leftMargin = 100;
-  const topMargin = 50;
+  const GRAPH_ORIGINX = 70;
+  const GRAPH_ORIGINY = 0;
+  const GRAPHW = canvasWidth - 200;
+  const GRAPHH = 450;
 
-  const plotHeight = 350;
+  const HASHMARKL = 5;
+  const PADDINGX = 20;
+  const PADDINGY = 20;
 
   const setup = (p5: p5Types, canvasParentRef: Element) => {
     p5.createCanvas(canvasWidth, 500).parent(canvasParentRef);
   };
 
   const draw = (p5: p5Types) => {
-    const barWidth = 20;
-    const surplus = 30;
+    const { max } = generateYAxis();
+    drawBars(p5, max);
+    drawHashMarksForXAxes(p5);
+  };
+
+  const windowResized = (p5: p5Types) =>
+    p5.resizeCanvas(canvasWidth, 500, true);
+
+  const generateYAxis = () => {
+    // @ts-ignore
     let max = 0,
       min = 0;
-    // X axis
-    const xLen = canvasWidth;
-    p5.line(leftMargin, topMargin + plotHeight, xLen, topMargin + plotHeight);
-    // X axis label
-    p5.textAlign(p5.LEFT);
-    p5.text("Estados", xLen / 2, topMargin + plotHeight + 50);
-
-    // ----------------------------------------------
-
-    // Y axis
-    p5.line(leftMargin, topMargin + plotHeight, leftMargin, topMargin);
-    // Y axis arrow at the top
-    p5.line(leftMargin - 10, topMargin + 10, leftMargin, topMargin);
-    p5.line(leftMargin + 10, topMargin + 10, leftMargin, topMargin);
-    // Y axis label
-    p5.angleMode(p5.DEGREES);
-    p5.rotate(-90);
-    p5.textAlign(p5.CENTER);
-    p5.text("Infectados", 0 - (topMargin + plotHeight / 2), leftMargin - 70);
-    p5.rotate(90);
-
     if (Object.entries(data).length > 0) {
       min =
         // @ts-ignore
         data.State["Ciudad de Mexico"].infected +
         // @ts-ignore
         data?.State["Ciudad de Mexico"]?.deceased;
+
       STATE_NAMES.forEach((stateName: string) => {
         const total =
           // @ts-ignore
@@ -182,67 +174,97 @@ export const useChart = (data: MainData) => {
           min = total;
         }
         if (total > max) {
-          max = total;
+          max = Math.ceil(total / 10) * 10;
         }
       });
+      max = Math.ceil(max / 10) * 10;
     }
-    // Y axis ticks
-    max = Math.ceil(max / 10) * 10;
-    const pixelsPerMpg = (plotHeight - surplus * 2) / (max - min);
+    return { max, min };
+  };
 
-    // ticks
-    // bottom tick
-    p5.textAlign(p5.RIGHT);
-    const minMpgY = topMargin + plotHeight - surplus;
-    p5.text(min.toLocaleString(), leftMargin - 10, minMpgY + 5); // + 5 to center text vertically
-    p5.line(leftMargin - 5, minMpgY, leftMargin + 5, minMpgY);
+  const drawBars = (p5: p5Types, avgMax: number) => {
+    const distY = (GRAPHH - PADDINGY) / 100;
+    const distX = (GRAPHW - 2 * PADDINGX) / STATE_NAMES.length;
 
-    // top tick
-    const maxMpgY = topMargin + surplus;
-    p5.text(max.toLocaleString(), leftMargin - 10, maxMpgY + 5);
-    p5.line(leftMargin - 5, maxMpgY, leftMargin + 5, maxMpgY);
-
-    // ticks in between
-    // => we'll put this many ticks:
-    const numVertTicks = 5;
-    // so each tick represents this much mpg:
-    const hpDelta = (max - min) / numVertTicks;
-
-    for (let i = 0; i < numVertTicks - 1; i++) {
-      const x = leftMargin;
-      const y = minMpgY - (i + 1) * hpDelta * pixelsPerMpg;
-      p5.text((min + (i + 1) * hpDelta).toLocaleString(), x - 10, y + 5);
-      p5.line(x - 5, y, x + 5, y);
-    }
-    p5.textAlign(p5.LEFT);
+    const startX = GRAPH_ORIGINX + PADDINGX;
 
     if (Object.entries(data).length > 0) {
       // @ts-ignore
-      p5.push();
       STATE_NAMES.forEach((stateName: string, index: number) => {
         const total =
           // @ts-ignore
           data?.State[stateName]?.infected + data?.State[stateName]?.deceased;
-        p5.fill(0, 80, 0);
-        const rwdHeight = pixelsPerMpg * total;
-        const rwdX = leftMargin + 50 * (index + 1);
-        p5.rect(rwdX, topMargin + plotHeight - rwdHeight, barWidth, rwdHeight);
-        p5.fill(0);
-        p5.strokeWeight(0);
-        p5.text(
-          SHORT_STATE_NAMES[index],
-          rwdX - 5,
-          topMargin + plotHeight + 20
-        );
+        const height = Math.ceil((total / avgMax) * GRAPHH * distY);
+        const x = startX + index * distX;
+        const y = GRAPH_ORIGINY + GRAPHH - height;
+        p5.fill(getColorForBar(p5, index % 4, x, y, distX, height));
+        p5.noStroke();
+        p5.rect(x, y, distX, height);
       });
-      p5.pop();
     }
-
-    p5.fill(0);
   };
 
-  const windowResized = (p5: p5Types) =>
-    p5.resizeCanvas(canvasWidth, 500, true);
+  function getColorForBar(
+    p5: p5Types,
+    index: number,
+    x: number,
+    y: number,
+    w: number,
+    h: number
+  ) {
+    const colors: p5Types.Color[] = [
+      p5.color(50, 70, 117),
+      p5.color(67, 103, 186),
+      p5.color(84, 129, 235),
+      p5.color(140, 175, 255),
+    ];
+
+    if (
+      p5.mouseX > x &&
+      p5.mouseX < x + w &&
+      p5.mouseY > y &&
+      p5.mouseY < y + h
+    ) {
+      return p5.color(150, 82, 217);
+    }
+    return colors[index];
+  }
+
+  function drawHashMarksForXAxes(p5: p5Types) {
+    const numHashMarks = STATE_NAMES.length;
+    const dist = GRAPHW - 2 * PADDINGX;
+    const unitDist = dist / numHashMarks;
+    const startX = GRAPH_ORIGINX + PADDINGX;
+    const hashMarkB = GRAPH_ORIGINY + GRAPHH - 1;
+
+    SHORT_STATE_NAMES.forEach((stateName: string, index: number) => {
+      const hashMarkX = startX + index * unitDist;
+      p5.stroke(51);
+      p5.line(hashMarkX, hashMarkB + HASHMARKL, hashMarkX, hashMarkB);
+      p5.push();
+      const x = hashMarkX;
+      const y = hashMarkB + 5;
+      p5.translate(x, y);
+      p5.rotate(p5.PI / 4);
+      drawTextForXHashMark(p5, 0, 0, stateName);
+      p5.pop();
+    });
+  }
+
+  function drawTextForXHashMark(
+    p5: p5Types,
+    x: number,
+    y: number,
+    str: string
+  ) {
+    const len = str.length * 10;
+    const height = 15;
+    p5.push();
+    p5.noStroke();
+    p5.fill(51);
+    p5.text(str, x, y, len, height);
+    p5.pop();
+  }
 
   return { setup, draw, windowResized, STATE_NAMES };
 };
