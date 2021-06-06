@@ -1,10 +1,13 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 import { useRef } from "react";
 import { useTheme, useMediaQuery } from "@material-ui/core";
 import useWindowDimensions from "./dimensionHooks";
 import p5Types from "p5";
-import mapboxgl from "mapbox-gl";
+
 import PolygonsData from "../api/polygons.json";
 import { MainData } from "../interfaces/mainData";
+// @ts-ignore
+import mapboxgl from "!mapbox-gl";
 
 export const useMappa = (states: Object) => {
   const mapboxToken =
